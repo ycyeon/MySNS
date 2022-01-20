@@ -1,12 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="EUC-KR">
-<title>Insert title here</title>
-</head>
-<body>
-	<h3>User ID : <%= request.getParameter("id") %></h3>
-</body>
-</html>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<% 
+	Date now = new Date();
+	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	String date = df.format(now);
+	
+	if(date.endsWith("20")){
+		response.sendRedirect("underCheck.jsp");
+		return;
+	}
+	
+	else{
+		String uid = request.getParameter("id");
+		String res = "<h3>사용자 아이디 : " + uid + "</h3>";
+		res += "<br>로그인 시간 : " + now.toString();
+		out.print(res);
+		
+		session.setAttribute("id", uid);
+		response.sendRedirect("main.jsp");
+	}
+	
+%>
+
