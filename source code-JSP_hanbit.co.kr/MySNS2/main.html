@@ -1,0 +1,78 @@
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<table align=center width=240>
+    <tr height=40>
+        <td><b>작성글 리스트</b></td>
+        <td align=right>
+            <a href='feedAdd.html'><button>글쓰기</button></a>
+        </td>
+    </tr>
+</table>
+<table id="list" align=center width=240></table>
+<table id="btnMore" align=center width=240>
+    <tr height=20><td><hr></td></tr>
+    <tr height=60><td align=center>
+        <button onclick="getNext()">작성글 더보기</button>
+    </td></tr>    
+</table>
+</body>
+</html>
+
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="js/core.js"></script>
+<script>
+$(document).ready(function() {
+    Page.init(start);
+});
+
+var minNo = -1;
+function start(uid) {
+    AJAX.call("jsp/feedGetPage.jsp", null, function(data) {
+        var feeds = JSON.parse(data.trim());
+        if (feeds.length > 0) {
+            minNo = feeds[feeds.length - 1].no;
+        }
+        show(feeds);
+    });
+}
+
+function show(feeds) {
+    var str = "";
+    for (var i=0; i<feeds.length; i++) {
+        var img = feeds[i].images, imgstr = "";
+        if (img != null) {
+            imgstr = "<img src='images/" + img + "' width=240>";
+        }        
+        var name = feeds[i].id;
+        if (feeds[i].user != null) {
+        	name = feeds[i].user.name;
+        }
+        str += "<tr><td colspan=2><hr></td></tr>";
+        str += "<tr>";
+        str += "<td><small>" + name + "</small></td>";
+        str += "<td><small>&nbsp;(" + feeds[i].ts + ")</small></td>";
+        str += "</tr>";
+        str += "<tr><td colspan=2>" + imgstr + "</td></tr>";
+        str += "<tr><td colspan=2>" + feeds[i].content + "</td></tr>";
+    }
+    $("#list").append(str);
+}
+
+function getNext() {
+    if (minNo <= 1) {
+        alert("더이상 작성글이 존재하지 않습니다.");
+        return;
+    }
+    var params = {limit: minNo};
+    AJAX.call("jsp/feedGetPage.jsp", params, function(data) {
+        var feeds = JSON.parse(data.trim());
+        if (feeds.length > 0) {
+            minNo = feeds[feeds.length - 1].no;
+        }
+        show(feeds);
+    });
+}
+</script>

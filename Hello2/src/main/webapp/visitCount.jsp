@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
-<%
+<%                                  
 	String strcnt = (String)application.getAttribute("counter");
 	int count = (strcnt == null) ? 0 : Integer.valueOf(strcnt);
 	out.print("방문자수 : " + count);
