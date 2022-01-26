@@ -7,18 +7,21 @@
     String upass = request.getParameter("ps");
     String uname = request.getParameter("name");
     
+    String jsonstr = request.getParameter("jsonstr");
+    
     UserDAO dao = new UserDAO();
     if (dao.exists(uid)) {
-        out.print("이미 가입한 회원입니다.");
+        out.print("EX");
         return;
     }
     
+    //if (dao.insert(uid, jsonstr)) {
     if (dao.insert(uid, upass, uname)) {
         //out.print("회원 가입이 완료되었습니다.");
         session.setAttribute("id", uid);
-        response.sendRedirect("main.jsp");
+        out.print("OK");
     }
     else {
-        out.print("회원 가입 중 오류가 발생하었습니다.");
+        out.print("ER");
     }
 %>

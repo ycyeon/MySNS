@@ -69,7 +69,7 @@ function signup() {
     var usrobj = {id: id, password: ps, name: name, ts: getToday()};
     var params = {id: id, jsonstr: JSON.stringify(usrobj)};
     
-    var url ="signup.jsp?id=" + id + "&ps=" + ps + "&name=" + name;
+    var url ="jsp/signup.jsp";
     AJAX.call(url, params, function(data) {
         var code = data.trim();
         if(code == "EX") {
